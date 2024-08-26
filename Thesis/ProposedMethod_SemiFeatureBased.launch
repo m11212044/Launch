@@ -1,0 +1,5 @@
+<launch>
+  <include file="/home/ericlai/Launch/RTABMap_Integration.launch">
+    <arg name="database_path"           default="~/visual_mapfile/DynamicEnvironment/5/PM_SFB.db"/>
+  </include>
+</launch>

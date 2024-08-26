@@ -1,0 +1,5 @@
+<launch>
+  <include file="/home/ericlai/Launch/CM_DB.launch">
+    <arg name="database_path"           default="~/visual_mapfile/DynamicEnvironment/5/CM_DB.db"/>
+  </include>
+</launch>
