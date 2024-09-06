@@ -10,19 +10,23 @@
 
 
   <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="hector_trajectory_server" output="screen">
-    <param name="target_frame_name" type="string" value="map" />
-    <param name="source_frame_name" type="string" value="base_link" />
+    <param name="target_frame_name" type="string" value="/map" />
+    <param name="source_frame_name" type="string" value="/base_link" />
     <param name="trajectory_update_rate" type="double" value="4" />
     <param name="trajectory_publish_rate" type="double" value="0.25" />
   </node>
 
 
 <!-- Camera 45 -->
-  <node pkg="tf" type="static_transform_publisher" name="base_link_to_left_camera_tf"
-      args="0.0 0.019 0.43 0.0 -0.785 0.0 /base_link /left_camera_link 100" />
+  <!-- <node pkg="tf" type="static_transform_publisher" name="base_link_to_left_camera_tf"
+      args="0.190 0.0 0.43 0.0 -0.785 0.0 /base_link /left_camera_link 40" />
 
   <node pkg="tf" type="static_transform_publisher" name="base_link_to_right_camera_tf"
-      args="0.0 -0.019 0.43 3.14 -0.785 0.0 /base_link /right_camera_link 100" />
+      args="-0.190 0.0 0.43 3.14 -0.785 0.0 /base_link /right_camera_link 40" /> -->
+
+  <node pkg="tf" type="static_transform_publisher" name="base_link_to_left_camera_tf" args="0.190 0.0 0.43 0.0 -0.785 0.0 /base_link /left_camera_link 40" />
+  <node pkg="tf" type="static_transform_publisher" name="base_link_to_right_camera_tf" args="-0.190 0.0 0.43 3.14 -0.785 0.0 /base_link /right_camera_link 40" />
+
 
 
   <!-- Choose between depth and stereo, set both to false to do only scan -->
@@ -55,7 +59,7 @@
   <arg name="ground_truth_frame_id"   default=""/>     <!-- e.g., "world" -->
   <arg name="ground_truth_base_frame_id" default=""/>  <!-- e.g., "tracker", a fake frame matching the frame "frame_id" (but on different TF tree) -->
   <arg name="namespace"               default="rtabmap"/>
-  <arg name="database_path"           default="~/visual_mapfile/EAI/test.db"/>
+  <arg name="database_path"           default="~/visual_mapfile/EAI/2024-9-3/test4.db"/>
   <arg name="queue_size"              default="100"/>
   <arg name="wait_for_transform"      default="0.2"/>
   <arg name="args"                    default=""/>
@@ -470,7 +474,7 @@
       <param name="Vis/EstimationType"                 type="int" value="0"/> 
       
       <!-- Rate (Hz) at which new nodes are added to map -->
-      <param name="Rtabmap/DetectionRate" type="string" value="1"/> 
+      <param name="Rtabmap/DetectionRate" type="string" value="4"/> 
 
       <!-- 2D SLAM -->
       <param name="Reg/Force3DoF" type="bool" value="true"/>
@@ -489,7 +493,7 @@
       <param name="Vis/FeatureType"          type="int" value="4"/>
 
       <!-- Maximum visual words per image (bag-of-words) -->
-      <param name="Kp/MaxFeatures" type="double" value="500"/>  
+      <param name="Kp/MaxFeatures" type="double" value="300"/>  
 
       <!-- Used to extract more or less SURF features -->
       <!--param name="SURF/HessianThreshold" type="string" value="100"/-->
