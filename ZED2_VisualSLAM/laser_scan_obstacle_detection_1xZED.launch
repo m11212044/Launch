@@ -1,0 +1,37 @@
+<launch>
+    <!-- Convert depth image to laser scan -->
+    <node name="depthimage_to_laserscan" pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" output="screen">
+        <param name="range_min" type="double" value="0.4"/>
+        <param name="range_max" type="double" value="10.0"/>    <!-- 20.0 -->
+        <param name="scan_height" type="int" value="200"/>
+        <remap from="image" to="/zed/zed_node/depth/depth_registered"/>
+        <remap from="camera_info" to="/zed/zed_node/depth/camera_info"/>
+        <param name="output_frame_id" type="string" value="zed_left_camera_frame"/>
+        <remap from="scan" to="/scan_stop"/>     <!-- Published topic name -->
+    </node>
+
+    <!-- Laser scan filter -->
+    <node name="laser_filter" pkg="laser_filters" type="scan_to_scan_filter_chain" output="screen">
+        <rosparam param="scan_filter_chain">
+            - name: angle
+              type: laser_filters/LaserScanAngularBoundsFilter
+              params:
+                <!-- ＋,— 30度 -->
+                lower_angle: -0.436111      <!-- -0.261799 -->      <!-- -0.523333 -->
+                upper_angle: 0.436111       <!-- 0.261799 -->       <!-- 0.523333 -->
+            <!-- - name: median_filter
+              type: laser_filters/MedianFilter
+              params:
+                  window_size: 5
+                  max_allowed_jump: 1.0 -->
+        </rosparam>
+        <remap from="scan" to="/scan_stop"/>     <!-- Subscribed topic name -->
+        <remap from="scan_filtered" to="/scan_filtered"/>       <!-- Published topic name -->
+    </node>
+
+    <node name="laser_scan_obstacle_detection" pkg="laser_scan_obstacle_detection" type="laser_scan_obstacle_detection" output="screen">
+        <param name="stop_distance" type="double" value="1.1"/>
+        <param name="publisher_topic_name" type="str" value="/cmd_vel_robot"/>
+    </node>
+
+</launch>
