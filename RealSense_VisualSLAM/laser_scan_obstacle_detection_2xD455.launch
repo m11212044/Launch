@@ -1,0 +1,60 @@
+<launch>
+
+    <!-- <node pkg="tf" type="static_transform_publisher" name="base_link_to_left_camera_tf" args="0.190 0.0 0.43 0.0 -0.785 0.0 /base_link /left_camera_link 40" />
+    <node pkg="tf" type="static_transform_publisher" name="base_link_to_right_camera_tf" args="-0.190 0.0 0.43 3.14 -0.785 0.0 /base_link /right_camera_link 40" /> -->
+
+    <!-- Convert depth image to laser scan -->
+    <node name="front_depthimage_to_laserscan" pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" output="screen">
+        <param name="range_min" type="double" value="0.2"/>
+        <param name="range_max" type="double" value="8.0"/>    <!-- 20.0 -->
+        <param name="scan_height" type="int" value="200"/>
+        <remap from="image" to="/left_camera/depth/image_rect_raw"/>
+        <remap from="camera_info" to="/left_camera/depth/camera_info"/>
+        <!-- <param name="output_frame_id" type="string" value="left_camera_depth_frame"/> -->
+        <remap from="scan" to="/front_scan"/>     <!-- Published topic name -->
+    </node>
+
+    <node name="back_depthimage_to_laserscan" pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" output="screen">
+        <param name="range_min" type="double" value="0.2"/>
+        <param name="range_max" type="double" value="8.0"/>    <!-- 20.0 -->
+        <param name="scan_height" type="int" value="200"/>
+        <remap from="image" to="/right_camera/depth/image_rect_raw"/>
+        <remap from="camera_info" to="/right_camera/depth/camera_info"/>
+        <!-- <param name="output_frame_id" type="string" value="/right_camera_link"/> -->
+        <remap from="scan" to="/back_scan"/>     <!-- Published topic name -->
+    </node>
+
+    <!-- Laser scan filter -->
+    <node name="front_laser_filter" pkg="laser_filters" type="scan_to_scan_filter_chain" output="screen">
+        <rosparam param="scan_filter_chain">
+            - name: angle
+              type: laser_filters/LaserScanAngularBoundsFilter
+              params:
+                <!-- ＋,— 30度 -->
+                lower_angle: -0.436111
+                upper_angle: 0.436111
+        </rosparam>
+        <remap from="scan" to="/front_scan"/>     <!-- Subscribed topic name -->
+        <remap from="scan_filtered" to="/front_scan_filtered"/>       <!-- Published topic name -->
+    </node>
+
+    <node name="back_laser_filter" pkg="laser_filters" type="scan_to_scan_filter_chain" output="screen">
+        <rosparam param="scan_filter_chain">
+            - name: angle
+              type: laser_filters/LaserScanAngularBoundsFilter
+              params:
+                <!-- ＋,— 30度 -->
+                lower_angle: -0.436111
+                upper_angle: 0.436111
+        </rosparam>
+        <remap from="scan" to="/back_scan"/>     <!-- Subscribed topic name -->
+        <remap from="scan_filtered" to="/back_scan_filtered"/>       <!-- Published topic name -->
+    </node>
+
+    <!-- Obstacle avoidance pause -->
+    <node name="laser_scan_obstacle_detection_2xcamera" pkg="laser_scan_obstacle_detection" type="laser_scan_obstacle_detection_2xcamera" output="screen">
+        <param name="stop_distance" type="double" value="0.8"/>
+        <param name="publisher_topic_name" type="str" value="/cmd_vel_robot"/>
+    </node>
+
+</launch>

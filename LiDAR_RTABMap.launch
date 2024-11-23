@@ -11,7 +11,7 @@
      $ Show TF and /rtabmap/cloud_map topics
     -->
 
-    <arg name="database_path"           default="~/lidar_mapfile/20230928_Lobby_Rotate_2.db"/>
+    <arg name="database_path"           default="~/lidar_mapfile/3DLiDAR_SLAM-png.db"/>
 
     <arg name="rtabmap_viz"   default="true"/>
     <arg name="use_imu"       default="false"/> <!-- Assuming IMU fixed to lidar with /velodyne -> /imu_link TF -->

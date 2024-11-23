@@ -23,10 +23,13 @@
 
   <node pkg="tf" type="static_transform_publisher" name="base_link_to_right_camera_tf"
       args="-0.190 0.0 0.43 3.14 -0.785 0.0 /base_link /right_camera_link 40" /> -->
+  
+  <!-- here -->
+  <!-- <node pkg="tf" type="static_transform_publisher" name="base_link_to_left_camera_tf" args="0.190 0.0 0.43 0.0 -0.785 0.0 /base_link /left_camera_link 80" />
+  <node pkg="tf" type="static_transform_publisher" name="base_link_to_right_camera_tf" args="-0.190 0.0 0.43 3.14 -0.785 0.0 /base_link /right_camera_link 80 " /> -->
 
-  <node pkg="tf" type="static_transform_publisher" name="base_link_to_left_camera_tf" args="0.190 0.0 0.43 0.0 -0.785 0.0 /base_link /left_camera_link 40" />
-  <node pkg="tf" type="static_transform_publisher" name="base_link_to_right_camera_tf" args="-0.190 0.0 0.43 3.14 -0.785 0.0 /base_link /right_camera_link 40" />
-
+  <!-- <node pkg="tf" type="static_transform_publisher" name="base_link_to_left_camera_tf" args="0.37 0.0 0.6 0.0 0.0 0.0 /base_link /left_camera_link 50" />
+  <node pkg="tf" type="static_transform_publisher" name="base_link_to_right_camera_tf" args="-0.11 0.0 0.6 3.14 0.0 0.0 /base_link /right_camera_link 50 " /> -->
 
 
   <!-- Choose between depth and stereo, set both to false to do only scan -->
@@ -37,10 +40,10 @@
 
   <!-- Choose visualization -->
   <arg name="rtabmap_viz"             default="false" />
-  <arg name="rviz"                    default="true" />
+  <arg name="rviz"                    default="false" />
 
   <!-- Localization-only mode -->
-  <arg name="localization"            default="false"/>
+  <arg name="localization"            default="true"/>
   <arg name="initial_pose"            default=""/>             <!-- Format: "x y z roll pitch yaw" or "x y z qx qy qz qw". Default: see "RGBD/StartAtOrigin" doc -->
 
   <!-- sim time for convenience, if playing a rosbag -->
@@ -52,14 +55,15 @@
   <arg name="gui_cfg"                 default="~/.ros/rtabmap_gui.ini" />
   <arg name="rviz_cfg"                default="/home/roy/Launch/config/rgbd.rviz" />
 
-  <arg name="frame_id"                default="base_link"/>     <!-- Fixed frame id, you may set "base_link" or "base_footprint" if they are published -->
-  <arg name="odom_frame_id"           default="wheel_odom"/>                <!-- If set, TF is used to get odometry instead of the topic -->
+  <arg name="frame_id"                default="/base_link"/>     <!-- Fixed frame id, you may set "base_link" or "base_footprint" if they are published -->
+  <arg name="odom_frame_id"           default="/wheel_odom"/>                <!-- If set, TF is used to get odometry instead of the topic -->
   <arg name="odom_frame_id_init"      default=""/>                <!-- If set, TF map->odom is published even if no odometry topic has been received yet. The frame id should match the one in the topic. -->
   <arg name="map_frame_id"            default="map"/>
   <arg name="ground_truth_frame_id"   default=""/>     <!-- e.g., "world" -->
   <arg name="ground_truth_base_frame_id" default=""/>  <!-- e.g., "tracker", a fake frame matching the frame "frame_id" (but on different TF tree) -->
   <arg name="namespace"               default="rtabmap"/>
-  <arg name="database_path"           default="~/visual_mapfile/EAI/2024-9-3/test4.db"/>
+  <!-- <arg name="database_path"           default="~/visual_mapfile/EAI/2xD455_SLAM_bag.db"/> -->
+  <arg name="database_path"           default="~/visual_mapfile/EAI/2024-10-16/2xD455_SLAM_bag_test4.db"/>
   <arg name="queue_size"              default="100"/>
   <arg name="wait_for_transform"      default="0.2"/>
   <arg name="args"                    default=""/>
@@ -79,6 +83,7 @@
   <!-- RGB-D related topics -->
   <arg name="rgb_topic"               default="/color/image_raw" />
   <arg name="depth_topic"             default="/aligned_depth_to_color/image_raw" />
+  <!-- <arg name="depth_topic"             default="/depth/image_rect_raw" /> -->
   <arg name="camera_info_topic"       default="/color/camera_info" />
   <arg name="depth_camera_info_topic" default="$(arg camera_info_topic)" />
 
@@ -474,7 +479,7 @@
       <param name="Vis/EstimationType"                 type="int" value="0"/> 
       
       <!-- Rate (Hz) at which new nodes are added to map -->
-      <param name="Rtabmap/DetectionRate" type="string" value="4"/> 
+      <param name="Rtabmap/DetectionRate" type="string" value="5"/> 
 
       <!-- 2D SLAM -->
       <param name="Reg/Force3DoF" type="bool" value="true"/>
@@ -493,12 +498,12 @@
       <param name="Vis/FeatureType"          type="int" value="4"/>
 
       <!-- Maximum visual words per image (bag-of-words) -->
-      <param name="Kp/MaxFeatures" type="double" value="300"/>  
+      <param name="Kp/MaxFeatures" type="double" value="1000"/>  
 
       <!-- Used to extract more or less SURF features -->
       <!--param name="SURF/HessianThreshold" type="string" value="100"/-->
       <!-- Minimum visual inliers to accept loop closure -->
-      <param name="Vis/MinInliers" type="double" value="10"/> 
+      <param name="Vis/MinInliers" type="double" value="10"/>  <!-- 預設20，數值越高定位精準度越高，但收斂速度會變慢 -->
       <!-- Set to false to avoid saving data when robot is not moving -->
       <param name="Mem/NotLinkedNodesKept" type="bool" value="false"/>
       <param     if="$(arg localization)" name="Mem/IncrementalMemory" type="bool" value="false"/>

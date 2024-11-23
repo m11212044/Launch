@@ -19,7 +19,7 @@
   <arg name="rviz"                    default="true" />
 
   <!-- Localization-only mode -->
-  <arg name="localization"            default="true"/>
+  <arg name="localization"            default="false"/>
   <arg name="initial_pose"            default=""/>             <!-- Format: "x y z roll pitch yaw" or "x y z qx qy qz qw". Default: see "RGBD/StartAtOrigin" doc -->
 
   <!-- sim time for convenience, if playing a rosbag -->
@@ -38,7 +38,7 @@
   <arg name="ground_truth_frame_id"   default=""/>     <!-- e.g., "world" -->
   <arg name="ground_truth_base_frame_id" default=""/>  <!-- e.g., "tracker", a fake frame matching the frame "frame_id" (but on different TF tree) -->
   <arg name="namespace"               default="rtabmap"/>
-  <arg name="database_path"           default="~/visual_mapfile/EAI/2024-8-5/ZED2_EL_2F.db"/>
+  <arg name="database_path"           default="~/visual_mapfile/EAI/teteteeeeeeeete.db"/>
   <arg name="queue_size"              default="100"/>
   <arg name="wait_for_transform"      default="0.2"/>
   <arg name="args"                    default=""/>
