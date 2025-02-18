@@ -1,5 +1,5 @@
 <launch>
-<rosparam file="$(find robot_control)/node/test.yaml"/>
+<rosparam file="$(find robot_control)/node/Robot_Navigation_Info.yaml"/>
 <node pkg="forklift_server" type="publisher_robot_pose.py" name="Robot_pose" output="screen">
     <param name="publish_name" value="/robot_pose" />
     <param name="rate" type="int" value="10" />
@@ -149,8 +149,8 @@
         "P2":[12.402, 5.428, 0.710, 0.704],
         "P3":[12.133, 25.012, 0.717, 0.697],
         "P4":[12.086, 24.919, 0.019, 1.000],
-        "P5":[13.980, 24.810, 0.031, 1.000],
-        "P6":[13.790, 24.989, 1.000, -0.023],      <!-- 藥局 -->
+        "P5":[13.680, 24.810, 0.031, 1.000],    <!-- 13.980 -->
+        "P6":[13.490, 24.989, 1.000, -0.023],      <!-- 藥局 --> <!-- 13.780 -->
         "P7":[12.061, 24.768, 0.999, -0.038],
         "P8":[12.011, 25.07, -0.697, 0.717],
         "P9":[12.216, 5.378, -0.692, 0.722],
